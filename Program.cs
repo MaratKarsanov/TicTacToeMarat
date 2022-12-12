@@ -8,6 +8,7 @@ namespace TicTacToeMarat
 {
     class Program
     {
+        const byte SIZE = 3;//размер поля
         static void showField(byte[,] field)
         {
             
@@ -19,8 +20,38 @@ namespace TicTacToeMarat
             }
         }
 
-        static bool isGameOver(byte[,] field)
+        static bool isGameOver(byte[,] field, byte player)
         {
+            //проверка по вертикали и горизонтали
+            for (var j = 0; j < SIZE; j++)
+            {
+                var kStr = 0;
+                var kStlb = 0;
+                for (var i = 0; i < SIZE; i++)
+                {
+                    if (field[j, i] == player)
+                        kStr++;
+                    if (field[i, j] == player)
+                        kStlb++;
+                }
+                if (kStr == SIZE || kStlb == SIZE)
+                {
+                    Console.WriteLine(player);
+                    return true;
+                }
+            }
+            var kMain = 0;
+            var kPob = 0;
+            //проверка по диагонали
+            for (var i = 0; i < SIZE; i++)
+            {
+                if (field[i, i] == player)
+                    kMain++;
+                if (field[i, SIZE - i - 1] == player)
+                    kPob++;
+            }
+            if (kMain == SIZE || kPob == SIZE)
+                return true;
             return false;
         }
 
@@ -32,6 +63,7 @@ namespace TicTacToeMarat
             var y = Convert.ToByte(temp[1]);
             if (x > 0 && x < 4 && y > 0 && y < 4)
             {
+                
                 i = (byte)(3 - y);
                 j = (byte)(x - 1);
                 return true;
@@ -45,16 +77,25 @@ namespace TicTacToeMarat
         {
             var field = new byte[3, 3];
             byte i, j;
-            byte player = 1; //ход крестиков
+            byte player = 2; 
             showField(field);
             
-            while (!isGameOver(field))
+            while (!isGameOver(field, player))
             {
                 if (isRightInput(out i, out j))
                 {
-                    field[i, j] = player;
-                    showField(field);
-                    player = (byte)(player % 2 + 1);//переход хода
+                    if (field[i, j] == 0)
+                    {
+                        player = (byte)(player % 2 + 1);//переход хода
+                        field[i, j] = player;
+                        showField(field);
+                        //player = (byte)(player % 2 + 1);//переход хода
+                    }
+                    else
+                    {
+                        Console.WriteLine("Поле занято!");
+                        showField(field);
+                    }
                 }
                 else
                 {
