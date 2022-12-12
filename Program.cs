@@ -45,14 +45,16 @@ namespace TicTacToeMarat
         {
             var field = new byte[3, 3];
             byte i, j;
+            byte player = 1; //ход крестиков
             showField(field);
             
             while (!isGameOver(field))
             {
                 if (isRightInput(out i, out j))
                 {
-                    field[i, j] = 1;
+                    field[i, j] = player;
                     showField(field);
+                    player = (byte)(player % 2 + 1);//переход хода
                 }
                 else
                 {
